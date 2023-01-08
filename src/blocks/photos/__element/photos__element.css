@@ -1,0 +1,9 @@
+.photos__element {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-radius: 10px;
+  background-color: white;
+  overflow: hidden;
+  position: relative;
+}

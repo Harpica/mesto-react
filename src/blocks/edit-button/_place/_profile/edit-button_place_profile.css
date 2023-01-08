@@ -1,0 +1,21 @@
+.edit-button_place_profile {
+  position: absolute;
+  right: -24px;
+  top: 15px;
+}
+
+
+
+@media screen and (max-width: 767px) {
+  .edit-button_place_profile {
+    right: -18px;
+    top: 9px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .edit-button_place_profile {
+    right: -28px;
+    top: calc(8px + 26px);
+  }
+}

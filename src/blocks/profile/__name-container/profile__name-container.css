@@ -1,0 +1,23 @@
+.profile__name-container {
+  padding: 0 18px 0 30px;
+  box-sizing: border-box;
+  margin-right: auto;
+  position: relative;
+  width: fit-content;
+  max-width: calc(100% - 150px - 120px - 24px - 18px);
+}
+
+@media screen and (max-width: 1000px) {
+  .profile__name-container {
+    width: calc(100% - 150px - 120px - 24px - 18px);
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .profile__name-container {
+    padding: 26px 0 34px;
+    margin: 0;
+    min-width: 189px;
+    max-width: calc(100% - 18px - 18px);
+  }
+}

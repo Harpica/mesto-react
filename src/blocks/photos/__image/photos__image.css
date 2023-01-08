@@ -1,0 +1,8 @@
+.photos__image {
+  display: block;
+  color: black;
+  max-width: 282px;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  cursor: pointer;
+}
