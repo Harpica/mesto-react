@@ -2,26 +2,11 @@ import avatar from '../images/Avatar.png';
 import ImagePopup from './ImagePopup';
 import PopupWithForm from './PopupWithForm';
 
-function Main() {
-  function handleEditAvatarClick() {
-    const avatarPopup = document.querySelector('.avatar-popup');
-    avatarPopup.classList.add('popup_opened');
-  }
-  function handleEditProfileClick() {
-    const profilePopup = document.querySelector('.profile-popup');
-    profilePopup.classList.add('popup_opened');
-  }
-  function handleAddPlaceClick() {
-    const addPhotoPopup = document.querySelector('.add-popup');
-    addPhotoPopup.classList.add('popup_opened');
-  }
+function Main(props) {
   return (
     <main className='content'>
       <section className='profile'>
-        <div
-          className='profile__image-container'
-          onClick={handleEditAvatarClick}
-        >
+        <div className='profile__image-container' onClick={props.onEditAvatar}>
           <img className='profile__photo' src={avatar} alt='Аватар' />
         </div>
         <div className='profile__name-container'>
@@ -30,7 +15,7 @@ function Main() {
             className='button edit-button edit-button_place_profile'
             type='button'
             aria-label='Редактировать профиль'
-            onClick={handleEditProfileClick}
+            onClick={props.onEditProfile}
           ></button>
           <p className='profile__description'>Исследователь океана</p>
         </div>
@@ -38,7 +23,7 @@ function Main() {
           className='button add-button add-button_place_profile'
           type='button'
           aria-label='Добавить новое Фото'
-          onClick={handleAddPlaceClick}
+          onClick={props.onAddPlace}
         ></button>
       </section>
       <section className='photos'>
@@ -48,6 +33,8 @@ function Main() {
       <PopupWithForm
         name='profile-popup'
         title='Редактировать профиль'
+        isOpen={props.isEditProfilePopupOpen}
+        onClose={props.onClose}
         children={
           <fieldset className='popup__input-container'>
             <input
@@ -85,6 +72,8 @@ function Main() {
       <PopupWithForm
         name='avatar-popup'
         title='Обновить аватар'
+        isOpen={props.isEditAvatarPopupOpen}
+        onClose={props.onClose}
         children={
           <fieldset className='popup__input-container'>
             <input
@@ -108,6 +97,8 @@ function Main() {
       <PopupWithForm
         name='add-popup'
         title='Новое место'
+        isOpen={props.isAddPlacePopupOpen}
+        onClose={props.onClose}
         children={
           <fieldset className='popup__input-container'>
             <input
@@ -141,6 +132,7 @@ function Main() {
       <PopupWithForm
         name='delete-popup'
         title='Вы уверены?'
+        onClose={props.onClose}
         children={
           <fieldset className='popup__input-container'>
             <input
