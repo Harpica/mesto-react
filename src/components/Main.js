@@ -1,10 +1,25 @@
 import avatar from '../images/Avatar.png';
 
 function Main() {
+  function handleEditAvatarClick() {
+    const avatarPopup = document.querySelector('.avatar-popup');
+    avatarPopup.classList.add('popup_opened');
+  }
+  function handleEditProfileClick() {
+    const profilePopup = document.querySelector('.profile-popup');
+    profilePopup.classList.add('popup_opened');
+  }
+  function handleAddPlaceClick() {
+    const addPhotoPopup = document.querySelector('.add-popup');
+    addPhotoPopup.classList.add('popup_opened');
+  }
   return (
     <main className='content'>
       <section className='profile'>
-        <div className='profile__image-container'>
+        <div
+          className='profile__image-container'
+          onClick={handleEditAvatarClick}
+        >
           <img className='profile__photo' src={avatar} alt='Аватар' />
         </div>
         <div className='profile__name-container'>
@@ -13,6 +28,7 @@ function Main() {
             className='button edit-button edit-button_place_profile'
             type='button'
             aria-label='Редактировать профиль'
+            onClick={handleEditProfileClick}
           ></button>
           <p className='profile__description'>Исследователь океана</p>
         </div>
@@ -20,6 +36,7 @@ function Main() {
           className='button add-button add-button_place_profile'
           type='button'
           aria-label='Добавить новое Фото'
+          onClick={handleAddPlaceClick}
         ></button>
       </section>
       <section className='photos'>
@@ -38,8 +55,8 @@ function Main() {
                 id='input-name'
                 name='profile-name'
                 placeholder='Имя'
-                minlength='2'
-                maxlength='40'
+                minLength='2'
+                maxLength='40'
                 required
               />
               <span className='popup__error' id='profile-name-error'></span>
@@ -49,8 +66,8 @@ function Main() {
                 id='input-description'
                 name='profile-job'
                 placeholder='Род деятельности'
-                minlength='2'
-                maxlength='40'
+                minLength='2'
+                maxLength='40'
                 required
               />
               <span className='popup__error' id='profile-job-error'></span>
@@ -115,8 +132,8 @@ function Main() {
                 className='popup__input add-popup__input-title'
                 name='photo-title'
                 placeholder='Название'
-                minlength='2'
-                maxlength='30'
+                minLength='2'
+                maxLength='30'
                 required
               />
               <span className='popup__error' id='photo-title-error'></span>
