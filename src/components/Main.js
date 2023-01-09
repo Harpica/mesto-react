@@ -1,23 +1,45 @@
-import avatar from '../images/Avatar.png';
 import ImagePopup from './ImagePopup';
 import PopupWithForm from './PopupWithForm';
+import React from 'react';
+import { api } from '../utils/Api';
+import Card from './Card';
 
 function Main(props) {
+  // переменные стейта для информации пользователя
+  const [userName, setUserName] = React.useState('');
+  const [userDescription, setUserDescription] = React.useState('');
+  const [userAvatar, setUserAvatar] = React.useState('');
+  // переменная стейта с информацией о карточках
+  const [cards, setCards] = React.useState([]);
+
+  React.useEffect(() => {
+    const userPromise = api.getUserInfo();
+    const cardsPromise = api.getInitialCards();
+    Promise.all([userPromise, cardsPromise])
+      .then(([user, cards]) => {
+        setUserName(user.name);
+        setUserDescription(user.about);
+        setUserAvatar(user.avatar);
+        setCards(cards);
+      })
+      .catch((err) => console.log(err));
+  });
+
   return (
     <main className='content'>
       <section className='profile'>
         <div className='profile__image-container' onClick={props.onEditAvatar}>
-          <img className='profile__photo' src={avatar} alt='Аватар' />
+          <img className='profile__photo' src={userAvatar} alt='Аватар' />
         </div>
         <div className='profile__name-container'>
-          <h1 className='profile__name'>Жак-Ив Кусто</h1>
+          <h1 className='profile__name'>{userName}</h1>
           <button
             className='button edit-button edit-button_place_profile'
             type='button'
             aria-label='Редактировать профиль'
             onClick={props.onEditProfile}
           ></button>
-          <p className='profile__description'>Исследователь океана</p>
+          <p className='profile__description'>{userDescription}</p>
         </div>
         <button
           className='button add-button add-button_place_profile'
@@ -27,7 +49,12 @@ function Main(props) {
         ></button>
       </section>
       <section className='photos'>
-        <ul className='photos__list'></ul>
+        <ul className='photos__list'>
+          {/* Проходимся по массиву и добавлем карточки на страницу */}
+          {cards.map((card, i) => (
+            <Card card={card} onClick={props.onCardClick} />
+          ))}
+        </ul>
       </section>
       {/* секция попапа для изменения данных профиля  */}
       <PopupWithForm
@@ -145,7 +172,7 @@ function Main(props) {
         }
       />
       {/* секция попапа для увеличения изображения */}
-      <ImagePopup />
+      <ImagePopup card={props.selectedCard} onClose={props.onClose} />
     </main>
   );
 }
