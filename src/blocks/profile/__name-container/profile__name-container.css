@@ -4,6 +4,8 @@
   margin-right: auto;
   position: relative;
   width: fit-content;
+  display: flex;
+  flex-direction: column;
   max-width: calc(100% - 150px - 120px - 24px - 18px);
 }
 
@@ -19,5 +21,6 @@
     margin: 0;
     min-width: 189px;
     max-width: calc(100% - 18px - 18px);
+    align-items: center;
   }
 }

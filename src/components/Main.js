@@ -3,6 +3,9 @@ import PopupWithForm from './PopupWithForm';
 import React from 'react';
 import { api } from '../utils/Api';
 import Card from './Card';
+import { Skeleton } from '@mui/material';
+import _ from 'lodash';
+import CardTemplate from './CardTemplate';
 
 function Main(props) {
   // переменные стейта для информации пользователя
@@ -23,23 +26,48 @@ function Main(props) {
         setCards(cards);
       })
       .catch((err) => console.log(err));
-  });
+  }, []);
 
   return (
     <main className='content'>
       <section className='profile'>
         <div className='profile__image-container' onClick={props.onEditAvatar}>
-          <img className='profile__photo' src={userAvatar} alt='Аватар' />
+          {userAvatar.length ? (
+            <div
+              className='profile__photo'
+              style={{ backgroundImage: `url(${userAvatar})` }}
+            ></div>
+          ) : (
+            <Skeleton
+              sx={{ bgcolor: 'grey.900' }}
+              variant='circular'
+              height={120}
+              width={120}
+            />
+          )}
         </div>
         <div className='profile__name-container'>
-          <h1 className='profile__name'>{userName}</h1>
+          {userName.length ? (
+            <h1 className='profile__name'>{userName}</h1>
+          ) : (
+            <Skeleton variant='text' sx={{ bgcolor: 'grey.900' }}>
+              <h1 className='profile__name'>Skeleton</h1>
+            </Skeleton>
+          )}
+
           <button
             className='button edit-button edit-button_place_profile'
             type='button'
             aria-label='Редактировать профиль'
             onClick={props.onEditProfile}
           ></button>
-          <p className='profile__description'>{userDescription}</p>
+          {userDescription.length ? (
+            <p className='profile__description'>{userDescription}</p>
+          ) : (
+            <Skeleton variant='text' sx={{ bgcolor: 'grey.900' }}>
+              <p className='profile__description'>Skeleton</p>
+            </Skeleton>
+          )}
         </div>
         <button
           className='button add-button add-button_place_profile'
@@ -50,10 +78,19 @@ function Main(props) {
       </section>
       <section className='photos'>
         <ul className='photos__list'>
-          {/* Проходимся по массиву и добавлем карточки на страницу */}
-          {cards.map((card, i) => (
-            <Card card={card} onClick={props.onCardClick} />
-          ))}
+          {cards.length
+            ? cards.map((card, i) => (
+                <Card key={card._id} card={card} onClick={props.onCardClick} />
+              ))
+            : _.range(6).map((card, i) => (
+                <Skeleton
+                  key={i}
+                  variant='rectangle'
+                  sx={{ bgcolor: 'grey.900' }}
+                >
+                  <CardTemplate />
+                </Skeleton>
+              ))}
         </ul>
       </section>
       {/* секция попапа для изменения данных профиля  */}
