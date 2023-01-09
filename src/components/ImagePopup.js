@@ -9,7 +9,7 @@ function ImagePopup(props) {
         <figure className='popup__figure'>
           <img
             src={props.card.link}
-            alt='Увеличенное изображение'
+            alt={props.card.name}
             className='popup__image'
           />
           <figcaption className='popup__caption'>{props.card.name}</figcaption>

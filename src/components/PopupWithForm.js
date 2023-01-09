@@ -1,24 +1,26 @@
 import React from 'react';
 
-function PopupWithForm(props) {
-  const [isOpen, setIsOpen] = React.useState(false);
-  React.useEffect(() => {
-    setIsOpen(props.isOpen);
-  }, [props.isOpen]);
+function PopupWithForm({ isOpen, onClose, name, title, buttonText, children }) {
   return (
-    <section className={`popup ${props.name} ${isOpen ? 'popup_opened' : ''}`}>
+    <section className={`popup ${name} ${isOpen ? 'popup_opened' : ''}`}>
       <div className='popup__container'>
-        <form
-          className={`popup__form ${props.name}__form`}
-          name={`${props.name}-form`}
-        >
+        <form className={`popup__form ${name}__form`} name={`${name}-form`}>
           <button
             className='button close-button'
             type='button'
-            onClick={props.onClose}
+            onClick={onClose}
           ></button>
-          <h2 className='popup__title'>{props.title}</h2>
-          {props.children}
+          <h2 className='popup__title'>{title}</h2>
+          <fieldset className='popup__input-container'>
+            {children}
+            <button
+              type='button'
+              className='popup__button'
+              aria-label='Сохранить изменения'
+            >
+              {buttonText}
+            </button>
+          </fieldset>
         </form>
       </div>
     </section>

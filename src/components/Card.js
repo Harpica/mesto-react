@@ -3,11 +3,12 @@ function Card(props) {
     props.onClick(props.card);
   }
   return (
-    <li className='photos__element' onClick={handleClick}>
+    <li className='photos__element'>
       <div
         className='photos__image'
         style={{ backgroundImage: `url(${props.card.link})` }}
-      ></div>
+        onClick={handleClick}
+      />
       <div className='photos__title-container'>
         <h2 className='photos__title'>{props.card.name}</h2>
         <div>
@@ -15,7 +16,7 @@ function Card(props) {
             className='button like-button like-button_place_photos'
             type='button'
             aria-label='Добавить в избранное'
-          ></button>
+          />
           <p className='photos__like-counter'>{props.card.likes.length}</p>
         </div>
       </div>
@@ -23,7 +24,7 @@ function Card(props) {
         className='button delete-button photos__delete-button'
         type='button'
         aria-label='Удалить'
-      ></button>
+      />
     </li>
   );
 }
