@@ -3,6 +3,6 @@
   color: black;
   width: 282px;
   aspect-ratio: 1 / 1;
-  background-size: contain;
+  background-size: cover;
   cursor: pointer;
 }
