@@ -3,23 +3,18 @@ import { api } from '../utils/Api';
 import Card from './Card';
 import { Skeleton } from '@mui/material';
 import _ from 'lodash';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 function Main(props) {
-  // переменные стейта для информации пользователя
-  const [userName, setUserName] = React.useState('');
-  const [userDescription, setUserDescription] = React.useState('');
-  const [userAvatar, setUserAvatar] = React.useState('');
+  const currentUser = React.useContext(CurrentUserContext);
+
   // переменная стейта с информацией о карточках
   const [cards, setCards] = React.useState([]);
 
   React.useEffect(() => {
-    const userPromise = api.getUserInfo();
-    const cardsPromise = api.getInitialCards();
-    Promise.all([userPromise, cardsPromise])
-      .then(([user, cards]) => {
-        setUserName(user.name);
-        setUserDescription(user.about);
-        setUserAvatar(user.avatar);
+    api
+      .getInitialCards()
+      .then((cards) => {
         setCards(cards);
       })
       .catch((err) => console.log(err));
@@ -29,10 +24,10 @@ function Main(props) {
     <main className='content'>
       <section className='profile'>
         <div className='profile__image-container' onClick={props.onEditAvatar}>
-          {userAvatar.length ? (
+          {currentUser.avatar ? (
             <div
               className='profile__photo'
-              style={{ backgroundImage: `url(${userAvatar})` }}
+              style={{ backgroundImage: `url(${currentUser.avatar})` }}
             ></div>
           ) : (
             <Skeleton
@@ -44,8 +39,8 @@ function Main(props) {
           )}
         </div>
         <div className='profile__name-container'>
-          {userName.length ? (
-            <h1 className='profile__name'>{userName}</h1>
+          {currentUser.name ? (
+            <h1 className='profile__name'>{currentUser.name}</h1>
           ) : (
             <Skeleton variant='text' sx={{ bgcolor: 'grey.900' }}>
               <h1 className='profile__name'>Skeleton</h1>
@@ -58,8 +53,8 @@ function Main(props) {
             aria-label='Редактировать профиль'
             onClick={props.onEditProfile}
           ></button>
-          {userDescription.length ? (
-            <p className='profile__description'>{userDescription}</p>
+          {currentUser.about ? (
+            <p className='profile__description'>{currentUser.about}</p>
           ) : (
             <Skeleton variant='text' sx={{ bgcolor: 'grey.900' }}>
               <p className='profile__description'>Skeleton</p>
