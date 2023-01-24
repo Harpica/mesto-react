@@ -1,29 +1,25 @@
 import React from 'react';
-import { api } from '../utils/Api';
 import Card from './Card';
 import { Skeleton } from '@mui/material';
 import _ from 'lodash';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
-function Main(props) {
+function Main({
+  cards,
+  onAddPlace,
+  onCardClick,
+  onCardDelete,
+  onCardLike,
+  onClick,
+  onEditAvatar,
+  onEditProfile,
+}) {
   const currentUser = React.useContext(CurrentUserContext);
-
-  // переменная стейта с информацией о карточках
-  const [cards, setCards] = React.useState([]);
-
-  React.useEffect(() => {
-    api
-      .getInitialCards()
-      .then((cards) => {
-        setCards(cards);
-      })
-      .catch((err) => console.log(err));
-  }, []);
 
   return (
     <main className='content'>
       <section className='profile'>
-        <div className='profile__image-container' onClick={props.onEditAvatar}>
+        <div className='profile__image-container' onClick={onEditAvatar}>
           {currentUser.avatar ? (
             <div
               className='profile__photo'
@@ -51,7 +47,7 @@ function Main(props) {
             className='button edit-button edit-button_place_profile'
             type='button'
             aria-label='Редактировать профиль'
-            onClick={props.onEditProfile}
+            onClick={onEditProfile}
           ></button>
           {currentUser.about ? (
             <p className='profile__description'>{currentUser.about}</p>
@@ -65,7 +61,7 @@ function Main(props) {
           className='button add-button add-button_place_profile'
           type='button'
           aria-label='Добавить новое Фото'
-          onClick={props.onAddPlace}
+          onClick={onAddPlace}
         ></button>
       </section>
       <section className='photos'>
@@ -75,10 +71,9 @@ function Main(props) {
                 <Card
                   key={card._id}
                   cardElement={card}
-                  onClick={props.onCardClick}
-                  onCardLike={props.onCardLike}
-                  onCardDelete={props.onCardDelete}
-                  setCards={setCards}
+                  onClick={onCardClick}
+                  onCardLike={onCardLike}
+                  onCardDelete={onCardDelete}
                 />
               ))
             : _.range(6).map((card, i) => (
