@@ -1,10 +1,22 @@
 import React from 'react';
 
-function PopupWithForm({ isOpen, onClose, name, title, buttonText, children }) {
+function PopupWithForm({
+  isOpen,
+  onClose,
+  onSubmit,
+  name,
+  title,
+  buttonText,
+  children,
+}) {
   return (
     <section className={`popup ${name} ${isOpen ? 'popup_opened' : ''}`}>
       <div className='popup__container'>
-        <form className={`popup__form ${name}__form`} name={`${name}-form`}>
+        <form
+          className={`popup__form ${name}__form`}
+          name={`${name}-form`}
+          onSubmit={onSubmit}
+        >
           <button
             className='button close-button'
             type='button'
@@ -14,7 +26,7 @@ function PopupWithForm({ isOpen, onClose, name, title, buttonText, children }) {
           <fieldset className='popup__input-container'>
             {children}
             <button
-              type='button'
+              type='submit'
               className='popup__button'
               aria-label='Сохранить изменения'
             >

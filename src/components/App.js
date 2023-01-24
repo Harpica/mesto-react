@@ -6,6 +6,7 @@ import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
 import { api } from '../utils/Api';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import EditProfilePopup from './EditProfilePopup';
 
 function App() {
   const [currentUser, setCurrentUser] = React.useState({});
@@ -58,6 +59,17 @@ function App() {
       .then(() => setCards((state) => state.filter((c) => c._id !== card._id)))
       .catch((err) => console.log(err));
   }
+  function handleUpdateUser(name, about) {
+    console.log(name, about);
+    api
+      .setUserInfo(name, about)
+      .then((user) => {
+        setCurrentUser(user);
+        closeAllPopups();
+        console.log('submit');
+      })
+      .catch((err) => console.log(err));
+  }
 
   return (
     <div className='root'>
@@ -72,36 +84,11 @@ function App() {
           onCardDelete={handleCardDelete}
         />
         {/* секция попапа для изменения данных профиля  */}
-        <PopupWithForm
-          name='profile-popup'
-          title='Редактировать профиль'
-          buttonText='Сохранить'
+        <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}
-        >
-          <input
-            type='text'
-            className='popup__input'
-            id='input-name'
-            name='profile-name'
-            placeholder='Имя'
-            minLength='2'
-            maxLength='40'
-            required
-          />
-          <span className='popup__error' id='profile-name-error'></span>
-          <input
-            type='text'
-            className='popup__input'
-            id='input-description'
-            name='profile-job'
-            placeholder='Род деятельности'
-            minLength='2'
-            maxLength='40'
-            required
-          />
-          <span className='popup__error' id='profile-job-error'></span>
-        </PopupWithForm>
+          onUpdateUser={handleUpdateUser}
+        />
         {/* секция попапа для изменения аватара профиля */}
         <PopupWithForm
           name='avatar-popup'
