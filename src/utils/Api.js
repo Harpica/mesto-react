@@ -57,6 +57,9 @@ class Api {
       headers: this.headers,
     });
   }
+  changeLikeCardStatus(cardID, isLiked) {
+    return isLiked ? this.removeLikeCard(cardID) : this.likeCard(cardID);
+  }
 }
 
 // Создадим объект для общения с сервером

@@ -72,7 +72,14 @@ function Main(props) {
         <ul className='photos__list'>
           {cards.length
             ? cards.map((card, i) => (
-                <Card key={card._id} card={card} onClick={props.onCardClick} />
+                <Card
+                  key={card._id}
+                  cardElement={card}
+                  onClick={props.onCardClick}
+                  onCardLike={props.onCardLike}
+                  onCardDelete={props.onCardDelete}
+                  setCards={setCards}
+                />
               ))
             : _.range(6).map((card, i) => (
                 <Skeleton

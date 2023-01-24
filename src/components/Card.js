@@ -1,8 +1,13 @@
 import React from 'react';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
-function Card({ card, onClick }) {
+function Card({ cardElement, onClick, onCardLike, onCardDelete, setCards }) {
   const currentUser = React.useContext(CurrentUserContext);
+  const [card, setCard] = React.useState(cardElement);
+
+  React.useEffect(() => {
+    setCard(cardElement);
+  }, [card, cardElement]);
 
   // Определяем, являемся ли мы владельцем текущей карточки
   const isOwn = card.owner._id === currentUser._id;
@@ -12,6 +17,13 @@ function Card({ card, onClick }) {
   function handleClick() {
     onClick(card);
   }
+  function handleLike() {
+    onCardLike(card, setCards);
+  }
+  function handleDelete() {
+    onCardDelete(card, setCards);
+  }
+
   return (
     <li className='photos__element'>
       <div
@@ -28,6 +40,7 @@ function Card({ card, onClick }) {
             }`}
             type='button'
             aria-label='Добавить в избранное'
+            onClick={handleLike}
           />
           <p className='photos__like-counter'>{card.likes.length}</p>
         </div>
@@ -37,6 +50,7 @@ function Card({ card, onClick }) {
           className='button delete-button photos__delete-button'
           type='button'
           aria-label='Удалить'
+          onClick={handleDelete}
         />
       )}
     </li>
