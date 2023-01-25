@@ -1,19 +1,51 @@
 import PopupWithForm from './PopupWithForm';
 import React from 'react';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import { Validator } from '../utils/Validator';
 
-const EditProfilePopup = ({ isOpen, onClose, onUpdateUser }) => {
+const EditProfilePopup = ({ isOpen, onClose, onUpdateUser, isLoading }) => {
   const currentUser = React.useContext(CurrentUserContext);
   const [name, setName] = React.useState('');
   const [description, setDescription] = React.useState('');
+  const [nameIsValid, setNameIsValid] = React.useState(true);
+  const [nameErrorMessage, setNameErrorMessage] = React.useState('');
+  const [descriptionIsValid, setDescriptionIsValid] = React.useState(true);
+  const [descriptionErrorMessage, setDescriptionErrorMessage] =
+    React.useState('');
+
+  const nameValidator = new Validator({
+    minLength: 3,
+    maxLength: 40,
+    required: true,
+  });
+  const descriptionValidator = new Validator({
+    minLength: 3,
+    maxLength: 40,
+    required: true,
+  });
 
   React.useEffect(() => {
     setName(currentUser.name);
     setDescription(currentUser.about);
-  }, [currentUser]);
+  }, [isOpen, currentUser]);
 
-  function handleChange(e, setValue) {
+  // Убираем ошибки с предыдущего открытия попапа
+  React.useEffect(() => {
+    setNameErrorMessage('');
+    setDescriptionErrorMessage('');
+  }, [isOpen]);
+
+  function handleChange(e, setValue, validator, setIsValid, setErrorMessage) {
     setValue(e.target.value);
+    validator.setValue(e.target.value);
+    validator.validate();
+    if (validator.isValid === false) {
+      setIsValid(false);
+      setErrorMessage(validator.errorMessage);
+      return;
+    }
+    setIsValid(true);
+    setErrorMessage('');
   }
 
   function handleSubmit(e) {
@@ -26,9 +58,12 @@ const EditProfilePopup = ({ isOpen, onClose, onUpdateUser }) => {
       name='profile-popup'
       title='Редактировать профиль'
       buttonText='Сохранить'
+      buttonLoadingText='Сохранение...'
+      isLoading={isLoading}
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={handleSubmit}
+      inputValidityStates={[nameIsValid, descriptionIsValid]}
     >
       <input
         type='text'
@@ -41,10 +76,21 @@ const EditProfilePopup = ({ isOpen, onClose, onUpdateUser }) => {
         required
         value={name || ''}
         onChange={(e) => {
-          handleChange(e, setName);
+          handleChange(
+            e,
+            setName,
+            nameValidator,
+            setNameIsValid,
+            setNameErrorMessage
+          );
         }}
       />
-      <span className='popup__error' id='profile-name-error'></span>
+      <span
+        className={`popup__error ${nameIsValid ? '' : 'popup__error_visible'}`}
+        id='profile-name-error'
+      >
+        {nameErrorMessage}
+      </span>
       <input
         type='text'
         className='popup__input'
@@ -56,10 +102,23 @@ const EditProfilePopup = ({ isOpen, onClose, onUpdateUser }) => {
         required
         value={description || ''}
         onChange={(e) => {
-          handleChange(e, setDescription);
+          handleChange(
+            e,
+            setDescription,
+            descriptionValidator,
+            setDescriptionIsValid,
+            setDescriptionErrorMessage
+          );
         }}
       />
-      <span className='popup__error' id='profile-job-error'></span>
+      <span
+        className={`popup__error ${
+          descriptionIsValid ? '' : 'popup__error_visible'
+        }`}
+        id='profile-job-error'
+      >
+        {descriptionErrorMessage}
+      </span>
     </PopupWithForm>
   );
 };

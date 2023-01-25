@@ -1,23 +1,19 @@
-function ImagePopup(props) {
+function ImagePopup({ isOpen, card, onClose }) {
   return (
     <section
       className={`popup image-popup popup_opacity_small ${
-        Object.keys(props.card).length ? 'popup_opened' : ''
+        isOpen ? 'popup_opened' : ''
       }`}
     >
       <div className='image-container'>
         <figure className='popup__figure'>
-          <img
-            src={props.card.link}
-            alt={props.card.name}
-            className='popup__image'
-          />
-          <figcaption className='popup__caption'>{props.card.name}</figcaption>
+          <img src={card.link} alt={card.name} className='popup__image' />
+          <figcaption className='popup__caption'>{card.name}</figcaption>
         </figure>
         <button
           className='button close-button'
           type='button'
-          onClick={props.onClose}
+          onClick={onClose}
         ></button>
       </div>
     </section>
