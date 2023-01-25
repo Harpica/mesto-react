@@ -1,5 +1,4 @@
 import React from 'react';
-import { checkFormValidity } from '../utils/Validator';
 
 function PopupWithForm({
   isOpen,
@@ -10,14 +9,9 @@ function PopupWithForm({
   title,
   buttonText,
   buttonLoadingText,
-  inputValidityStates,
+  isValid,
   children,
 }) {
-  const [isValid, setIsValid] = React.useState(true);
-  React.useEffect(() => {
-    setIsValid(checkFormValidity(inputValidityStates));
-  }, [inputValidityStates, isOpen]);
-
   function handleSubmit(e) {
     e.preventDefault();
     onSubmit();
