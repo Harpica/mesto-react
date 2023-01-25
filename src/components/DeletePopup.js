@@ -2,8 +2,7 @@ import React from 'react';
 import PopupWithForm from './PopupWithForm';
 
 const DeletePopup = ({ isOpen, onClose, onCardDelete, isLoading, card }) => {
-  function handleSubmit(e) {
-    e.preventDefault();
+  function handleSubmit() {
     onCardDelete(card);
   }
   return (
@@ -16,6 +15,7 @@ const DeletePopup = ({ isOpen, onClose, onCardDelete, isLoading, card }) => {
       onSubmit={handleSubmit}
       onClose={onClose}
       isLoading={isLoading}
+      isValid={true}
     />
   );
 };
