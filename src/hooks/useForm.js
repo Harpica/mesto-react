@@ -1,5 +1,9 @@
 import React from 'react';
 
+// inputValidators:  {
+//    [key: string (is equal to the name of input)] : Validator (class Validator)
+// }
+
 const useForm = (inputValidators, isInitialValid = true) => {
   const [values, setValues] = React.useState({});
   const [errors, setErrors] = React.useState({});
@@ -7,31 +11,78 @@ const useForm = (inputValidators, isInitialValid = true) => {
   const [isValid, setIsValid] = React.useState(isInitialValid);
 
   React.useEffect(() => {
-    function checkFormValidity() {
-      // initial check or check after popup'd being closed
-      if (Object.values(validities).length === 0) {
-        setIsValid(isInitialValid);
-        setErrors({});
+    const validate = (key, value) => {
+      const { errorMessage, isValid } = inputValidators[key].validate(value);
+      if (isValid === false) {
+        if (errors[key] === errorMessage) {
+          return;
+        }
+        setErrors((errors) => ({
+          ...errors,
+          [key]: errorMessage,
+        }));
+        setValidities((validities) => ({
+          ...validities,
+          [key]: false,
+        }));
         return;
       }
-      // checking while changing inputs
-      if (Object.values(validities).some((value) => value === false)) {
-        setIsValid(false);
-        return;
-      } else if (Object.values(validities).every((value) => value === true)) {
-        setIsValid(true);
-        setErrors({});
+      if (errors[key] === '' || errors === {}) {
         return;
       }
+      setErrors((errors) => ({
+        ...errors,
+        [key]: '',
+      }));
+      setValidities((validities) => ({
+        ...validities,
+        [key]: true,
+      }));
+    };
+
+    // Для каждого required, проверяем, есть ли там значение, если нет, то сразу записываем false в validities для инпута
+    Object.keys(inputValidators).forEach((key) => {
+      if (
+        inputValidators[key].required === true &&
+        values[key] === undefined &&
+        validities[key] === undefined
+      ) {
+        setValidities((validities) => ({ ...validities, [key]: false }));
+        return;
+      }
+    });
+
+    // Если значения values уже прогрузились и не undefined - делаем валидацию
+    if (
+      Object.values(values).every(
+        (value) => value !== undefined && value !== null
+      )
+    ) {
+      Object.keys(values).forEach((key) => {
+        validate(key, values[key]);
+      });
     }
-    checkFormValidity();
-  }, [validities, isInitialValid]);
+  }, [values, errors, inputValidators, validities]);
+
+  // Смотрим, что все validities true - делаем всю форму валидной
+  React.useEffect(() => {
+    if (
+      Object.values(validities).some((value) => {
+        return value === false;
+      })
+    ) {
+      setIsValid(false);
+      return;
+    } else if (Object.values(validities).every((value) => value === true)) {
+      setIsValid(true);
+      return;
+    }
+  }, [validities]);
 
   function handleChange(e) {
     const name = e.target.name;
     if (e.target.value !== undefined) {
       setValues((values) => ({ ...values, [name]: e.target.value }));
-      validate(e.target.name, e.target.value);
     }
   }
 
@@ -39,31 +90,7 @@ const useForm = (inputValidators, isInitialValid = true) => {
     setValidities({});
     setErrors({});
     setValues({});
-  }
-
-  function validate(key, value) {
-    inputValidators[key].setValue(value);
-    inputValidators[key].validate();
-    if (inputValidators[key].isValid === false) {
-      setErrors((errors) => ({
-        ...errors,
-        [key]: inputValidators[key].errorMessage,
-      }));
-      setValidities((validities) => ({
-        ...validities,
-        [key]: false,
-      }));
-
-      return;
-    }
-    setErrors((errors) => ({
-      ...errors,
-      [key]: '',
-    }));
-    setValidities((validities) => ({
-      ...validities,
-      [key]: true,
-    }));
+    setIsValid(isInitialValid);
   }
 
   return {
@@ -74,7 +101,6 @@ const useForm = (inputValidators, isInitialValid = true) => {
     errors,
     validities,
     isValid,
-    validate,
   };
 };
 
