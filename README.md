@@ -16,8 +16,11 @@
 ## Available Scripts
 
 `npm start` - Runs the app in the development mode.
+
 `npm test` - Launches the test runner in the interactive watch mode.
+
 `npm run build` - Builds the app for production to the `build` folder.
+
 `npm run deploy` - Deploys the app to the Git-hub pages (make sure "homepage" in package.json is actual)
 
 ## Instruments & Tecnologies
