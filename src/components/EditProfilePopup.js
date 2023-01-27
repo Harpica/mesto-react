@@ -1,22 +1,25 @@
-import PopupWithForm from './PopupWithForm';
 import React from 'react';
-import { CurrentUserContext } from '../contexts/CurrentUserContext';
-import { Validator } from '../utils/Validator';
+import PopupWithForm from './PopupWithForm';
 import useForm from '../hooks/useForm';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import { Validator } from '../utils/validator';
+import { TEXT_MAXLENGTH, TEXT_MINLENGTH } from '../utils/constants';
+
+// New validator for each input field
+const nameValidator = new Validator({
+  minLength: TEXT_MINLENGTH,
+  maxLength: TEXT_MAXLENGTH,
+  required: true,
+});
+const descriptionValidator = new Validator({
+  minLength: TEXT_MINLENGTH,
+  maxLength: TEXT_MAXLENGTH,
+  required: true,
+});
 
 const EditProfilePopup = React.memo(
   ({ isOpen, onClose, onUpdateUser, isLoading }) => {
     const currentUser = React.useContext(CurrentUserContext);
-    const nameValidator = new Validator({
-      minLength: 3,
-      maxLength: 40,
-      required: true,
-    });
-    const descriptionValidator = new Validator({
-      minLength: 3,
-      maxLength: 40,
-      required: true,
-    });
 
     const {
       handleChange,
@@ -65,15 +68,15 @@ const EditProfilePopup = React.memo(
           id='input-name'
           name='name'
           placeholder='Имя'
-          minLength='2'
-          maxLength='40'
+          minLength={TEXT_MINLENGTH}
+          maxLength={TEXT_MAXLENGTH}
           required
           value={values.name ?? ''}
           onChange={handleChange}
         />
         <span
           className={`popup__error ${
-            validities.name === false ? 'popup__error_visible' : ''
+            !validities.name && 'popup__error_visible'
           }`}
           id='profile-name-error'
         >
@@ -85,15 +88,15 @@ const EditProfilePopup = React.memo(
           id='input-description'
           name='description'
           placeholder='Род деятельности'
-          minLength='2'
-          maxLength='40'
+          minLength={TEXT_MINLENGTH}
+          maxLength={TEXT_MAXLENGTH}
           required
           value={values.description ?? ''}
           onChange={handleChange}
         />
         <span
           className={`popup__error ${
-            validities.description === false ? 'popup__error_visible' : ''
+            !validities.description && 'popup__error_visible'
           }`}
           id='profile-job-error'
         >

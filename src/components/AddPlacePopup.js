@@ -1,19 +1,22 @@
 import React from 'react';
 import PopupWithForm from './PopupWithForm';
-import { Validator } from '../utils/Validator';
 import useForm from '../hooks/useForm';
+import { Validator } from '../utils/validator';
+import { TEXT_MAXLENGTH, TEXT_MINLENGTH } from '../utils/constants';
+
+// New validator for each input field
+const nameValidator = new Validator({
+  minLength: TEXT_MINLENGTH,
+  maxLength: TEXT_MAXLENGTH,
+  required: true,
+});
+const linkValidator = new Validator({
+  isUrl: true,
+  required: true,
+});
 
 const AddPlacePopup = React.memo(
   ({ isOpen, onClose, onAddPlace, isLoading }) => {
-    const nameValidator = new Validator({
-      minLength: 3,
-      maxLength: 40,
-      required: true,
-    });
-    const linkValidator = new Validator({
-      isUrl: true,
-      required: true,
-    });
     const { handleChange, values, errors, validities, isValid, resetForm } =
       useForm({ title: nameValidator, link: linkValidator }, false);
 
@@ -42,15 +45,15 @@ const AddPlacePopup = React.memo(
           className='popup__input'
           name='title'
           placeholder='Название'
-          minLength='2'
-          maxLength='30'
+          minLength={TEXT_MINLENGTH}
+          maxLength={TEXT_MAXLENGTH}
           required
-          value={values.title || ''}
+          value={values.title ?? ''}
           onChange={handleChange}
         />
         <span
           className={`popup__error ${
-            validities.title === false ? 'popup__error_visible' : ''
+            !validities.title && 'popup__error_visible'
           }`}
           id='photo-title-error'
         >
@@ -60,6 +63,8 @@ const AddPlacePopup = React.memo(
           type='url'
           className='popup__input'
           name='link'
+          minLength={TEXT_MINLENGTH}
+          maxLength={TEXT_MAXLENGTH}
           placeholder='Ссылка на картинку'
           required
           value={values.link ?? ''}
@@ -67,7 +72,7 @@ const AddPlacePopup = React.memo(
         />
         <span
           className={`popup__error ${
-            validities.link === false ? 'popup__error_visible' : ''
+            !validities.link && 'popup__error_visible'
           }`}
           id='photo-link-error'
         >

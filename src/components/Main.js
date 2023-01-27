@@ -1,8 +1,9 @@
 import React from 'react';
 import Card from './Card';
-import { Skeleton } from '@mui/material';
-import _ from 'lodash';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import { INIT_CARDS_NUMBER } from '../utils/constants';
+import { Skeleton } from '@mui/material';
+import range from 'lodash/range';
 
 const Main = React.memo(
   ({
@@ -76,7 +77,7 @@ const Main = React.memo(
                     onCardDelete={onCardDelete}
                   />
                 ))
-              : _.range(6).map((card, i) => (
+              : range(INIT_CARDS_NUMBER).map((card, i) => (
                   <Skeleton
                     key={i}
                     variant='rectangle'

@@ -41,7 +41,8 @@ export class Validator {
     }
   }
   _isValidUrl(url) {
-    const objRE = /(^https?:\/\/)?[a-z0-9~_\-.]+\.[a-z]{2,9}(\/|:|\?[!-~]*)?$/i;
+    const objRE =
+      /(?:https?:\/\/)?(?:[\w.]+)\.(?:[a-z]{2,6}\.?)(?:\/[\w.]*)*\/?/i;
     return objRE.test(url);
   }
 }
