@@ -10,7 +10,6 @@ export class Validator {
     this.required = required;
     this._isUrl = isUrl;
   }
-
   validate(value) {
     if (
       this._minLength !== false &&

@@ -63,8 +63,6 @@ const AddPlacePopup = React.memo(
           type='url'
           className='popup__input'
           name='link'
-          minLength={TEXT_MINLENGTH}
-          maxLength={TEXT_MAXLENGTH}
           placeholder='Ссылка на картинку'
           required
           value={values.link ?? ''}

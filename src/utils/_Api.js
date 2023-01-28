@@ -61,7 +61,6 @@ class Api {
     return isLiked ? this.removeLikeCard(cardID) : this.likeCard(cardID);
   }
 }
-
 // Создадим объект для общения с сервером
 export const api = new Api({
   baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-56',
