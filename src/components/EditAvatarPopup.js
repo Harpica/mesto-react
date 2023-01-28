@@ -1,10 +1,16 @@
 import React from 'react';
+import useEscapeKey from '../hooks/useEsc';
+import useOutsideClick from '../hooks/useOutsideClick';
 import PopupWithForm from './PopupWithForm';
 
 const EditAvatarPopup = React.memo(
   ({ isOpen, onClose, onUpdateAvatar, isLoading }) => {
     const inputRef = React.useRef();
     const [isValid, setIsValid] = React.useState(false);
+
+    const ref = useOutsideClick(handleClose, isOpen);
+
+    useEscapeKey(handleClose, isOpen);
 
     // validation according to validity state of inputRef
     function handleChange(e) {
@@ -39,6 +45,7 @@ const EditAvatarPopup = React.memo(
         onClose={handleClose}
         onSubmit={handleSubmit}
         isValid={isValid}
+        popupRef={ref}
       >
         <input
           ref={inputRef}

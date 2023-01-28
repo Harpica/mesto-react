@@ -4,6 +4,8 @@ import useForm from '../hooks/useForm';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import { Validator } from '../utils/validator';
 import { TEXT_MAXLENGTH, TEXT_MINLENGTH } from '../utils/constants';
+import useEscapeKey from '../hooks/useEsc';
+import useOutsideClick from '../hooks/useOutsideClick';
 
 // New validator for each input field
 const nameValidator = new Validator({
@@ -34,6 +36,8 @@ const EditProfilePopup = React.memo(
       true
     );
 
+    const ref = useOutsideClick(handleOnClose, isOpen);
+
     React.useEffect(() => {
       setValues((values) => ({
         ...values,
@@ -41,6 +45,8 @@ const EditProfilePopup = React.memo(
         description: currentUser.about,
       }));
     }, [isOpen, currentUser, setValues]);
+
+    useEscapeKey(handleOnClose, isOpen);
 
     function handleSubmit() {
       onUpdateUser(values.name, values.description);
@@ -61,6 +67,7 @@ const EditProfilePopup = React.memo(
         onClose={handleOnClose}
         onSubmit={handleSubmit}
         isValid={isValid}
+        popupRef={ref}
       >
         <input
           type='text'

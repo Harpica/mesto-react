@@ -1,7 +1,12 @@
 import React from 'react';
+import useEscapeKey from '../hooks/useEsc';
+import useOutsideClick from '../hooks/useOutsideClick';
 import PopupWithForm from './PopupWithForm';
 
 const DeletePopup = ({ isOpen, onClose, onCardDelete, isLoading, card }) => {
+  const ref = useOutsideClick(onClose, isOpen);
+  useEscapeKey(onClose, isOpen);
+
   function handleSubmit() {
     onCardDelete(card);
   }
@@ -16,6 +21,7 @@ const DeletePopup = ({ isOpen, onClose, onCardDelete, isLoading, card }) => {
       onClose={onClose}
       isLoading={isLoading}
       isValid={true}
+      popupRef={ref}
     />
   );
 };

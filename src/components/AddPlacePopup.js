@@ -3,6 +3,8 @@ import PopupWithForm from './PopupWithForm';
 import useForm from '../hooks/useForm';
 import { Validator } from '../utils/validator';
 import { TEXT_MAXLENGTH, TEXT_MINLENGTH } from '../utils/constants';
+import useEscapeKey from '../hooks/useEsc';
+import useOutsideClick from '../hooks/useOutsideClick';
 
 // New validator for each input field
 const nameValidator = new Validator({
@@ -19,6 +21,10 @@ const AddPlacePopup = React.memo(
   ({ isOpen, onClose, onAddPlace, isLoading }) => {
     const { handleChange, values, errors, validities, isValid, resetForm } =
       useForm({ title: nameValidator, link: linkValidator }, false);
+
+    const ref = useOutsideClick(handleOnClose, isOpen);
+
+    useEscapeKey(handleOnClose, isOpen);
 
     function handleSubmit() {
       onAddPlace(values.title, values.link);
@@ -39,6 +45,7 @@ const AddPlacePopup = React.memo(
         onClose={handleOnClose}
         onSubmit={handleSubmit}
         isValid={isValid}
+        popupRef={ref}
       >
         <input
           type='text'

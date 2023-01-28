@@ -11,6 +11,7 @@ const PopupWithForm = React.memo(
     buttonText,
     buttonLoadingText,
     isValid,
+    popupRef,
     children,
   }) => {
     function handleSubmit(e) {
@@ -19,7 +20,7 @@ const PopupWithForm = React.memo(
     }
     return (
       <section className={`popup ${name} ${isOpen ? 'popup_opened' : ''}`}>
-        <div className='popup__container'>
+        <div className='popup__container' ref={popupRef}>
           <form
             className={`popup__form ${name}__form`}
             name={`${name}-form`}
