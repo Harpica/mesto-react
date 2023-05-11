@@ -24,7 +24,7 @@
 
 `npm run deploy` - Deploys the app to the Git-hub pages (make sure "homepage" in package.json is actual)
 
-## Instruments & Tecnologies
+## Instruments & Technologies
 
 - HTML5.
 - CSS3.
